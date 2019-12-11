@@ -17,6 +17,7 @@ def switch_tp(argument):
         7: 50.5,
         8: 54.0,
         9: 148.5,
+        10: 172.5
     }
 
     return switcher.get(argument, 'Invalid Time point')
