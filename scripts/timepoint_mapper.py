@@ -1,6 +1,6 @@
 def switch_tp(argument):
     """
-    time point switcher for hours after start of experiment
+    time point switcher for number of hours after start of experiment
 
     :param argument:
     :return:
@@ -19,4 +19,5 @@ def switch_tp(argument):
         9: 148.5,
     }
 
-    return switcher.get(argument, 'Invalid Experiment')
+    return switcher.get(argument, 'Invalid Time point')
+
