@@ -63,8 +63,8 @@ for t in df_count['timepoint'].unique():
             wl_agg1 = wl_range1.agg({'Abs': ['min', 'max', 'mean', 'median']}).T
             wl_agg2 = wl_range2.agg({'Abs': ['min', 'max', 'mean', 'median']}).T
 
-            wl_abs1 = wl_agg1['mean']
-            wl_abs2 = wl_agg2['mean']
+            wl_abs1 = list(wl_agg1['mean'])[0]
+            wl_abs2 = list(wl_agg2['mean'])[0]
 
             R = wl_abs2 / wl_abs1
 
@@ -72,7 +72,14 @@ for t in df_count['timepoint'].unique():
             e2 = EPSILON_L2_I / EPSILON_L1_HI
             e3 = EPSILON_L1_I / EPSILON_L1_HI
 
-            pH = PK2 + math.log10((R - e1) / (e2 - e3 * R))
+            try:
+                pH = PK2 + math.log10((R - e1) / (e2 - e3 * R))
+
+            except ValueError as e:
+                print((R - e1) / (e2 - e3 * R))
+                print(str(e) + ' >>> ' + str(t) + ':' + str(s) + ':' + str(r))
+
+                pH = PK2 + math.log10(abs((R - e1) / (e2 - e3 * R)))
 
             pH_array[int(r) - 1] = pH
 
