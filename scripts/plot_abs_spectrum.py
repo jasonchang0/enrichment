@@ -30,6 +30,19 @@ target_sample = 3
 
 sub_df = df[(df['rep'] == 1) & (df['sample'] == target_sample)].drop(['rep', 'sample'], axis=1, inplace=False)
 
+# Retain only the visible part of the spectrum
+sub_df = sub_df[(sub_df.wl <= 700) & (sub_df.wl >= 400)]
+
+'''
+Normalize by sum to unity
+
+Alternatives:
+1) Normalize by maximum peak absorbance
+2) Standardization >>> lambda _: (_ - _.mean()) / _.std()
+3) Minmax normalization >>> lambda _: (_ - _.min()) / (_.max() - _.min())
+'''
+sub_df['norm_abs'] = sub_df['Abs'] / sub_df.groupby('timepoint', axis=0)['Abs'].transform('sum')
+
 x = np.array(list(sub_df['wl']))
 x = sorted(np.unique(x))
 
@@ -38,7 +51,7 @@ y = sorted(np.unique(y))
 
 X, Y = np.meshgrid(x, y)
 
-Z = np.array(list(sub_df['Abs'])).reshape(X.shape)
+Z = np.array(list(sub_df['norm_abs'])).reshape(X.shape)
 
 ax = plt.axes(projection='3d')
 
@@ -52,8 +65,15 @@ ax.plot_surface(X, Y, Z, rstride=1, cstride=5,
 ax.set_title('Spectrophotometric pH Measurements')
 ax.set_xlabel('Wavelength [nm]')
 ax.set_ylabel('Time [hr]')
-ax.set_zlabel('Absorbance')
+ax.set_zlabel('Normalized Absorbance')
 
 plt.show()
+
+
+
+
+
+
+
 
 
