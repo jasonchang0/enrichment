@@ -26,7 +26,7 @@ os.chdir(db)
 df = pd.read_csv('ph_meta.csv')
 df.rename({'WL/nm': 'wl'}, axis=1, inplace=True)
 
-target_sample = 3
+target_sample = 5
 
 sub_df = df[(df['rep'] == 1) & (df['sample'] == target_sample)].drop(['rep', 'sample'], axis=1, inplace=False)
 
