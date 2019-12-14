@@ -7,6 +7,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import style
 from mpl_toolkits.mplot3d import Axes3D
+import sample_mapper
+from sample_mapper import switch_sp
 
 style.use('fivethirtyeight')
 
@@ -26,7 +28,7 @@ os.chdir(db)
 df = pd.read_csv('ph_meta.csv')
 df.rename({'WL/nm': 'wl'}, axis=1, inplace=True)
 
-target_sample = 5
+target_sample = 6
 
 sub_df = df[(df['rep'] == 1) & (df['sample'] == target_sample)].drop(['rep', 'sample'], axis=1, inplace=False)
 
@@ -62,7 +64,7 @@ cstride: Array column stride (step size), defaults to 1
 ax.plot_surface(X, Y, Z, rstride=1, cstride=5,
                 cmap='inferno', edgecolor='none')
 
-ax.set_title('Spectrophotometric pH Measurements')
+ax.set_title('Spectrophotometric pH Measurements [{}]'.format(switch_sp(target_sample)))
 ax.set_xlabel('Wavelength [nm]')
 ax.set_ylabel('Time [hr]')
 ax.set_zlabel('Normalized Absorbance')
